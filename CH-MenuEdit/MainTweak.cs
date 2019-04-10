@@ -35,25 +35,20 @@ namespace MenuEdit
         string changedText = "",
                changedFontName = "";
 
-        List<Replacer> foundReplacers;
-        bool foundAllReplacers = false;
-
         void Start()
         {
-            foundReplacers = new List<Replacer>();
             Dictionaries.Initialize();
             Config.Initialize();
+            SceneManager.sceneLoaded += OnSceneChanged;
             if (Config.CurrentProfile != null)
             {
                 ReplaceAll("Main Menu");
             }
-            SceneManager.sceneLoaded += OnSceneChanged;
         }
 
         void Update()
         {
             if (Input.GetKeyDown(Config.OpenKey)) { menuOpen = !menuOpen; }
-            if (foundAllReplacers) { foundReplacers.Clear(); foundAllReplacers = false; }
         }
 
         void LateUpdate()
@@ -65,10 +60,20 @@ namespace MenuEdit
                     if (replacer.ObjectName == tc.name)
                     {
                         replacer.Replace(tc);
-                        foundReplacers.Add(replacer);
                     }
                 }
             }
+            foreach (var img in Utils.GetComponents<Image>())
+            {
+                foreach (var replacer in Config.CurrentProfile.GetObjectsForScene(SceneManager.GetActiveScene().name))
+                {
+                    if (replacer.ObjectName == img.name)
+                    {
+                        replacer.Replace(img);
+                    }
+                }
+            }
+
         }
 
         void OnGUI()
@@ -78,73 +83,21 @@ namespace MenuEdit
 
         void OnSceneChanged(Scene scene, LoadSceneMode mode)
         {
-            foundReplacers.Clear();
-            foundAllReplacers = false;
             ReplaceAll(scene.name);
         }
 
-        void ReplaceAll(string sceneName, bool isFailRun = false)
+        void ReplaceAll(string sceneName)
         {
             if (Config.CurrentProfile == null) return;
-            if (!isFailRun)
+            foreach (var vp in Utils.GetComponents<VideoPlayer>())
             {
-                Debug.WriteLine("Not a fail run, gathering components...");
-                foreach (var img in Utils.GetComponents<Image>())
+                foreach (var replacer in Config.CurrentProfile.GetObjectsForScene(sceneName))
                 {
-                    foreach (var replacer in Config.CurrentProfile.GetObjectsForScene(sceneName))
+                    if (replacer.ObjectName == vp.name)
                     {
-                        if (replacer.ObjectName == img.name)
-                        {
-                            replacer.Replace(img);
-                            foundReplacers.Add(replacer);
-                        }
+                        replacer.Replace(vp);
                     }
                 }
-                foreach (var vp in Utils.GetComponents<VideoPlayer>())
-                {
-                    foreach (var replacer in Config.CurrentProfile.GetObjectsForScene(sceneName))
-                    {
-                        if (replacer.ObjectName == vp.name)
-                        {
-                            replacer.Replace(vp);
-                            foundReplacers.Add(replacer);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Debug.WriteLine("Fail run, gathering missing components...");
-                foreach (var img in Utils.GetComponents<Image>())
-                {
-                    foreach (var replacer in Config.CurrentProfile.GetObjectsForScene(sceneName))
-                    {
-                        if (replacer.ObjectName == img.name && !foundReplacers.Contains(replacer))
-                        {
-                            replacer.Replace(img);
-                            foundReplacers.Add(replacer);
-                        }
-                    }
-                }
-                foreach (var vp in Utils.GetComponents<VideoPlayer>())
-                {
-                    foreach (var replacer in Config.CurrentProfile.GetObjectsForScene(sceneName))
-                    {
-                        if (replacer.ObjectName == vp.name && !foundReplacers.Contains(replacer))
-                        {
-                            replacer.Replace(vp);
-                            foundReplacers.Add(replacer);
-                        }
-                    }
-                }
-            }
-            if (foundReplacers.Count != Config.CurrentProfile.GetObjectsForScene(sceneName).Count)
-            {
-                ReplaceAll(sceneName, true);
-            }
-            else
-            {
-                foundAllReplacers = true;
             }
         }
 
