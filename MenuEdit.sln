@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CH-MenuEdit", "CH-MenuEdit\CH-MenuEdit.csproj", "{DB784891-140F-4F25-A968-E641D0AEC263}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB784891-140F-4F25-A968-E641D0AEC263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB784891-140F-4F25-A968-E641D0AEC263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB784891-140F-4F25-A968-E641D0AEC263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB784891-140F-4F25-A968-E641D0AEC263}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B40BD0F6-D870-41D7-9C0A-732BFF131155}
+	EndGlobalSection
+EndGlobal
